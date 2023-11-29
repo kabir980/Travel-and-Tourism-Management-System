@@ -170,13 +170,11 @@ public class BookPackage extends JFrame implements ActionListener {
 
                 try {
                     Conn conn = new Conn();
-
-                    // Generate the booking ID
-                    String bookingID = generatePackageBookingID();
-
-                    String sql = "insert into bookpackages values(?, ?, ?, ?, ?, ?, ?)";
+                    long bookingID = generatePackageBookingID();
+                    System.out.println("Generated Booking ID: " + bookingID);
+                    String sql = "insert into bookpackages (booking_id, place, name, customerID_Number, persons, date, totalprice) values(?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement ps = conn.c.prepareStatement(sql);
-                    ps.setString(1, bookingID);
+                    ps.setLong(1, bookingID);
                     ps.setString(2, t1.getText());
                     ps.setString(3, t2.getText());
                     ps.setString(4, t3.getText());
@@ -186,7 +184,8 @@ public class BookPackage extends JFrame implements ActionListener {
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Package Booked Successfully");
                     this.dispose();
-                } catch (Exception e1) {
+                } catch (SQLException  e1) {
+                    e1.printStackTrace();
                 }
             }
         }
@@ -207,7 +206,7 @@ public class BookPackage extends JFrame implements ActionListener {
         }
     }
 
-    private String generatePackageBookingID() {
+    private long generatePackageBookingID() {
         // Retrieve the current timestamp
         long timestamp = System.currentTimeMillis();
 
@@ -215,7 +214,7 @@ public class BookPackage extends JFrame implements ActionListener {
         int randomNumber = (int) (Math.random() * (9999 - 1000 + 1) + 1000);
 
         // Concatenate the timestamp and random number to form the booking ID
-        return "BID-" + timestamp + "-" + randomNumber;
+        return Long.parseLong(String.valueOf(timestamp) + String.valueOf(randomNumber));
     }
 
     private boolean validateFields() {
@@ -244,18 +243,14 @@ public class BookPackage extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, "Please enter a valid total persons count (1-50).");
             return false;
         }
-        
-          if (!isValidDate(dateChooser.getDate())) {
+
+        if (!isValidDate(dateChooser.getDate())) {
             JOptionPane.showMessageDialog(null, "Please select a valid date (not in the past).");
             return false;
         }
-        
-        
 
         return true;
     }
-    
-    
 
     //Check for customer name field
     private boolean isNumeric(String str) {
@@ -285,20 +280,20 @@ public class BookPackage extends JFrame implements ActionListener {
             return false;
         }
     }
-    
+
     //check for total persons field
     private boolean isValidTotalPersons(String totalPersons) {
-    try {
-        int count = Integer.parseInt(totalPersons);
-        return count > 0 && count <= 50;
-    } catch (NumberFormatException e) {
-        return false;
+        try {
+            int count = Integer.parseInt(totalPersons);
+            return count > 0 && count <= 50;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
-}
-    
+
     // Check if the selected date is valid (not in the past)
     private boolean isValidDate(Date selectedDate) {
-        
+
         Date currentDate = new Date(); // Get the current date
 
         return selectedDate.after(currentDate); // Check if selected date is after the current date

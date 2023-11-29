@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class UserDetails extends JPanel implements ActionListener {
     
-    JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11;
+    JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15;
     JButton b1, b2, b3;
     JPanel panel, panel1;
     JTextArea ta1;
@@ -64,60 +64,88 @@ public class UserDetails extends JPanel implements ActionListener {
         l1.setBorder(new LineBorder(new Color(192, 192, 192)));
         l1.setBackground(new Color(255, 255, 255));
         l1.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
-        l1.setBounds(2, 400, 230, 45);
+        l1.setBounds(2, 300, 230, 45);
         panel1.add(l1);
         
         l2 = new JLabel("Full Name  ");
         l2.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
         l2.setBorder(new LineBorder(new Color(192, 192, 192)));
         l2.setBackground(Color.WHITE);
-        l2.setBounds(2, 444, 230, 45);
+        l2.setBounds(2, 344, 230, 45);
         panel1.add(l2);
+        
+        l12 = new JLabel("Created by  ");
+        l12.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
+        l12.setBorder(new LineBorder(new Color(192, 192, 192)));
+        l12.setBackground(Color.WHITE);
+        l12.setBounds(2, 388, 230, 45);
+        panel1.add(l12);
         
         l3 = new JLabel();
         l3.setBorder(new LineBorder(new Color(192, 192, 192)));
         l3.setBackground(new Color(255, 255, 255));
         l3.setFont(new Font("Segoe UI Historic", Font.BOLD, 20));
-        l3.setBounds(230, 400, 320, 45);
+        l3.setBounds(230, 300, 320, 45);
         panel1.add(l3);
         
         l4 = new JLabel();
         l4.setFont(new Font("Segoe UI Historic", Font.BOLD, 20));
         l4.setBorder(new LineBorder(new Color(192, 192, 192)));
         l4.setBackground(Color.WHITE);
-        l4.setBounds(230, 444, 320, 45);
+        l4.setBounds(230, 344, 320, 45);
         panel1.add(l4);
+        
+        l13 = new JLabel();
+        l13.setFont(new Font("Segoe UI Historic", Font.BOLD, 20));
+        l13.setBorder(new LineBorder(new Color(192, 192, 192)));
+        l13.setBackground(Color.WHITE);
+        l13.setBounds(230, 388, 320, 45);
+        panel1.add(l13);
         
         l5 = new JLabel("Email  ");
         l5.setBorder(new LineBorder(new Color(192, 192, 192)));
         l5.setBackground(new Color(255, 255, 255));
         l5.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
-        l5.setBounds(550, 400, 150, 45);
+        l5.setBounds(550, 300, 150, 45);
         panel1.add(l5);
         
         l6 = new JLabel("Number  ");
         l6.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
         l6.setBorder(new LineBorder(new Color(192, 192, 192)));
         l6.setBackground(Color.WHITE);
-        l6.setBounds(550, 444, 150, 45);
+        l6.setBounds(550, 344, 150, 45);
         panel1.add(l6);
+        
+        l14 = new JLabel("Created at  ");
+        l14.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
+        l14.setBorder(new LineBorder(new Color(192, 192, 192)));
+        l14.setBackground(Color.WHITE);
+        l14.setBounds(550, 388, 150, 45);
+        panel1.add(l14);
         
         l7 = new JLabel();
         l7.setBorder(new LineBorder(new Color(192, 192, 192)));
         l7.setBackground(new Color(255, 255, 255));
         l7.setFont(new Font("Segoe UI Historic", Font.BOLD, 20));
-        l7.setBounds(700, 400, 310, 45);
+        l7.setBounds(700, 300, 310, 45);
         panel1.add(l7);
         
         l8 = new JLabel();
         l8.setFont(new Font("Segoe UI Historic", Font.BOLD, 20));
         l8.setBorder(new LineBorder(new Color(192, 192, 192)));
         l8.setBackground(Color.WHITE);
-        l8.setBounds(700, 444, 310, 45);
+        l8.setBounds(700, 344, 310, 45);
         panel1.add(l8);
         
+        l15 = new JLabel();
+        l15.setFont(new Font("Segoe UI Historic", Font.BOLD, 20));
+        l15.setBorder(new LineBorder(new Color(192, 192, 192)));
+        l15.setBackground(Color.WHITE);
+        l15.setBounds(700, 388, 310, 45);
+        panel1.add(l15);
+        
         l10 = new JLabel();
-        l10.setBounds(300, 20, 500, 360);
+        l10.setBounds(300, 20, 300, 200);
         l10.setBorder(new LineBorder(new Color(192, 192, 192)));
         panel1.add(l10);
         
@@ -164,10 +192,12 @@ public class UserDetails extends JPanel implements ActionListener {
             PreparedStatement ps = conn.c.prepareStatement("select * from users where username='" + username + "'");
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                l3.setText(rs.getString(1));
-                l8.setText(rs.getString(4));
-                l4.setText(rs.getString(2));
-                l7.setText(rs.getString(3));
+                l3.setText(rs.getString(2));
+                l8.setText(rs.getString(5));
+                l4.setText(rs.getString(3));
+                l7.setText(rs.getString(4));
+                l13.setText(rs.getString(7));
+                l15.setText(rs.getString(8));
                 
             }
         } catch (Exception e) {

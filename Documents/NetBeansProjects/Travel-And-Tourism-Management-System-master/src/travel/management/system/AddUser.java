@@ -19,6 +19,13 @@ public class AddUser extends JFrame implements ActionListener {
     UserPanel up;
     UserDetails ud;
     String username;
+    
+    private String adminUsername;
+    
+    AddUser(String adminUsername){
+        this();
+        this.adminUsername = adminUsername;
+    }
 
     AddUser() {
 
@@ -136,20 +143,20 @@ public class AddUser extends JFrame implements ActionListener {
 
         try {
             Conn conn = new Conn();
-            String sql = "select *from  users where username='" + username + "'";
+            String sql = "select * from  users where username='" + username + "'";
             PreparedStatement ps = conn.c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                //t1.setEditable(false);
                 t1.setBackground(Color.WHITE);
-                t1.setText(rs.getString(1));
-                t2.setText(rs.getString(2));
-                t3.setText(rs.getString(3));
-                t4.setText(rs.getString(4));
-                p1.setText(rs.getString(5));
+                t1.setText(rs.getString("username"));
+                t2.setText(rs.getString("full_name")); // Set full name in the full name field
+                t3.setText(rs.getString("email"));
+                t4.setText(rs.getString("number"));
+                p1.setText(rs.getString("password"));
 
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -158,53 +165,56 @@ public class AddUser extends JFrame implements ActionListener {
 //    }
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == b2) {
+       if (e.getSource() == b2) {
+        String Username = t1.getText();
+        String Name = t2.getText();
+        String email = t3.getText();
+        String Number = t4.getText();
+        String password = new String(p1.getPassword());
 
-            String Username = t1.getText();
-            String Name = t2.getText();
-            String email = t3.getText();
-            String Number = t4.getText();
-            String password = new String(p1.getPassword());
+        if (Username.isEmpty() || Name.isEmpty() || email.isEmpty() || Number.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all fields.");
+        } else if (Username.matches("^\\d.*")) {
+            JOptionPane.showMessageDialog(AddUser.this, "Username cannot start with a number.");
+        } else if (isUsernameExists(Username)) {
+            JOptionPane.showMessageDialog(AddUser.this, "Username already exists. Please choose a different username.");
+        } else if (Name.matches(".*\\d.*")) {
+            JOptionPane.showMessageDialog(AddUser.this, "Name cannot contain numbers.");
+        } else if (!isValidEmail(email)) {
+            JOptionPane.showMessageDialog(AddUser.this, "Invalid email address.");
+        } else if (!isValidContactNumber(Number)) {
+            JOptionPane.showMessageDialog(AddUser.this, "Invalid contact number. Please enter a 11-digit number.");
+        } else if (isNumberExists(Number)) {
+            JOptionPane.showMessageDialog(AddUser.this, "Contact Number already exists. Please use a different number.");
+        } else if (password.length() <= 6) {
+            JOptionPane.showMessageDialog(AddUser.this, "Password must be more than 6 characters.");
+        } else if (!password.matches(".*[!@#$%^&*()-+=].*")) {
+            JOptionPane.showMessageDialog(AddUser.this, "Password must contain at least one special character.");
+        } else if (isEmailExists(email)) {
+            JOptionPane.showMessageDialog(AddUser.this, "Email already exists. Please use a different email address.");
+        } else {
+            try {
+                Conn c = new Conn();
+                int loggedInAdminId = getCurrentAdminId(); // Get the ID of the logged-in admin
+                String query = "INSERT INTO users (username, full_name, email, number, password, created_by) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps = c.prepareStatement(query);
+                ps.setString(1, Username);
+                ps.setString(2, Name);
+                ps.setString(3, email);
+                ps.setString(4, Number);
+                ps.setString(5, password);
+                ps.setInt(6, loggedInAdminId);
+                
+                ps.executeUpdate();
 
-            if (Username.isEmpty() || Name.isEmpty() || email.isEmpty() || Number.isEmpty() || password.isEmpty()) {
-
-                JOptionPane.showMessageDialog(null, "Please fill in all fields.");
-            } else if (Username.matches("^\\d.*")) {
-                JOptionPane.showMessageDialog(AddUser.this, "Username cannot start with a number.");
-            }else if (isUsernameExists(Username)) {
-                JOptionPane.showMessageDialog(AddUser.this, "Username already exists. Please choose a different username.");
-            }else if (Name.matches(".*\\d.*")) {
-                JOptionPane.showMessageDialog(AddUser.this, "Name cannot contains number.");
-            } else if (!isValidEmail(email)) {
-                JOptionPane.showMessageDialog(AddUser.this, "Invalid email address.");
-            } else if (!isValidContactNumber(Number)) {
-                JOptionPane.showMessageDialog(AddUser.this, "Invalid contact number. Please enter a 11-digit number.");
-            } else if (isNumberExists(Number)) {
-            JOptionPane.showMessageDialog(AddUser.this, "Contact Number is already exists. Please use a different number.");
-            }else if (password.length() <= 6) {
-                JOptionPane.showMessageDialog(AddUser.this, "Password must be more than 6 characters.");
-            } else if (!password.matches(".*[!@#$%^&*()-+=].*")) {
-                JOptionPane.showMessageDialog(AddUser.this, "Password must contain at least one special character.");
-            }  else if (isEmailExists(email)) {
-                JOptionPane.showMessageDialog(AddUser.this, "Email already exists. Please use a different email address.");
-            } else {
-                String query = "insert into users values('" + Username + "', '" + Name + "', '" + email + "', '" + Number + "', '" + password + "')";
-
-                try {
-                    Conn c = new Conn();
-
-                    c.s.executeUpdate(query);
-
-                    JOptionPane.showMessageDialog(null, "User Account Created Successfully");
-                    setVisible(false);
-
-                } catch (Exception ae) {
-                    ae.printStackTrace();
-                }
-
+                JOptionPane.showMessageDialog(null, "User Account Created Successfully");
+                setVisible(false);
+            } catch (Exception ae) {
+                ae.printStackTrace();
             }
-
-        } else if (e.getSource() == b3) {
+        }
+    }
+        else if (e.getSource() == b3) {
             String Username = t1.getText();
             String Name = t2.getText();
             String email = t3.getText();
@@ -226,7 +236,7 @@ public class AddUser extends JFrame implements ActionListener {
             } else {
                 try {
                     Conn conn = new Conn();
-                    String sql = "update users set username='" + Username + "', name='" + Name + "', email='" + email + "', number='" + Number + "', password='" + password + "' where username='" + username + "'";
+                    String sql = "update users set username='" + Username + "', full_name='" + Name + "', email='" + email + "', number='" + Number + "', password='" + password + "' where username='" + username + "'";
                     conn.s.executeUpdate(sql);
                     JOptionPane.showMessageDialog(null, "User updated successfully");
                     setVisible(false);
@@ -294,6 +304,25 @@ public class AddUser extends JFrame implements ActionListener {
 }
 
     public static void main(String[] args) {
-        new AddUser();
+        new AddUser("admin");
     }
+
+private int getCurrentAdminId() { // Pass the admin's username as an argument
+    try {
+        Conn conn = new Conn();
+        String sql = "SELECT id FROM adminlogins WHERE username = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, this.adminUsername);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt("id"); // Return the admin ID
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    // Handle cases where there's no admin found or an error occurs (e.g., return -1 or throw an exception)
+   return -1;
+}
 }

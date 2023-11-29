@@ -27,7 +27,8 @@ public class AdminHome extends JFrame implements ActionListener {
     public BookedHotelPanel bookedhotelpanel;
     public UserPanel userpanel;
 
-    String username;
+    String username, place;
+    int id;
 
     public static void main(String[] args) {
         new AdminHome("").setVisible(true);
@@ -83,8 +84,8 @@ public class AdminHome extends JFrame implements ActionListener {
         b4 = createButton("Hotel");
         sidebarpanel.add(b4);
 
-        b5 = createButton("All Customer");
-        sidebarpanel.add(b5);
+//        b5 = createButton("All Customer");
+//        sidebarpanel.add(b5);
 
         b6 = createButton("Booked Package");
         sidebarpanel.add(b6);
@@ -175,14 +176,14 @@ public class AdminHome extends JFrame implements ActionListener {
 
         } else if (source == b3) {
             activeButton(b3);
-            packagepanel = new PackagePanel(this);
+            packagepanel = new PackagePanel(this, username);
             packagepanel.setLocation(panelx, panely);
             packagepanel.setFocusable(true);
             contentPane.add(packagepanel);
 
         } else if (source == b4) {
             activeButton(b4);
-            hotelpanel = new HotelPanel(this);
+            hotelpanel = new HotelPanel(this, username);
             hotelpanel.setLocation(panelx, panely);
             hotelpanel.setFocusable(true);
             contentPane.add(hotelpanel);
@@ -196,7 +197,7 @@ public class AdminHome extends JFrame implements ActionListener {
 
         } else if (source == b6) {
             activeButton(b6);
-            bookedpackagepanel = new BookedPackagePanel();
+            bookedpackagepanel = new BookedPackagePanel(id);
             bookedpackagepanel.setLocation(panelx, panely);
             bookedpackagepanel.setFocusable(true);
             contentPane.add(bookedpackagepanel);
@@ -215,7 +216,7 @@ public class AdminHome extends JFrame implements ActionListener {
 
         } else if (source == b9) {
             activeButton(b9);
-            userpanel = new UserPanel();
+            userpanel = new UserPanel(username);
             userpanel.setLocation(panelx, panely);
             userpanel.setFocusable(true);
             contentPane.add(userpanel);

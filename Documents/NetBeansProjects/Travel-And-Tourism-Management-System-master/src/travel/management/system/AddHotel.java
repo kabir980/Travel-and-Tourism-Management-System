@@ -20,6 +20,15 @@ public class AddHotel extends JFrame implements ActionListener {
     String name;
     byte[] photo = null;
 
+    private String adminUsername;
+    
+    String username;
+
+    AddHotel(String adminUsername) {
+        this();
+        this.adminUsername = adminUsername;
+    }
+
     AddHotel() {
 
         setSize(750, 612);
@@ -154,18 +163,18 @@ public class AddHotel extends JFrame implements ActionListener {
         b3.setVisible(true);
         try {
             Conn conn = new Conn();
-            String sql = "select *from  hotels where name='" + name + "'";
+            String sql = "select * from  hotels where name='" + name + "'";
             PreparedStatement ps = conn.c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 t1.setEditable(false);
                 t1.setBackground(Color.WHITE);
-                t1.setText(rs.getString(1));
-                t2.setText(rs.getString(2));
-                t3.setText(rs.getString(3));
-                t4.setText(rs.getString(4));
-                t5.setText(rs.getString(5));
-                byte[] photo = rs.getBytes(6);
+                t1.setText(rs.getString(2));
+                t2.setText(rs.getString(3));
+                t3.setText(rs.getString(4));
+                t4.setText(rs.getString(5));
+                t5.setText(rs.getString(6));
+                byte[] photo = rs.getBytes(7);
                 Image i1 = new ImageIcon(photo).getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH);
                 l3.setIcon(new ImageIcon(i1));
             }
@@ -207,7 +216,9 @@ public class AddHotel extends JFrame implements ActionListener {
             if (validateFields()) {
                 try {
                     Conn conn = new Conn();
-                    String sql = "insert into hotels values(?, ?, ?, ?, ?, ?)";
+                    int loggedInAdminId = getCurrentAdminId(); // Get the ID of the logged-in admin
+                    String sql = "INSERT INTO hotels (name, state, ac, food, hotelcost, image, created_by) values(?, ?, ?, ?, ?, ?, ?)";
+//                    System.out.println("SQL Query: " + sql);
                     PreparedStatement ps = conn.c.prepareStatement(sql);
                     ps.setString(1, t1.getText());
                     ps.setString(2, t2.getText());
@@ -215,6 +226,8 @@ public class AddHotel extends JFrame implements ActionListener {
                     ps.setString(4, t4.getText());
                     ps.setString(5, t5.getText());
                     ps.setBytes(6, photo);
+                    ps.setInt(7, loggedInAdminId);
+                  
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Hotel Created Successfully");
                     hp.createtablemodel();
@@ -262,24 +275,24 @@ public class AddHotel extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "The hotel name cannot contain numeric values.", "Invalid Hotel Name", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        
+
         // Check if AC Cost Per Day is a valid numeric value
-    if (!isValidNumericValue(acCost)) {
-        JOptionPane.showMessageDialog(this, "AC Cost Per Day must be a valid numeric value.", "Invalid Value", JOptionPane.WARNING_MESSAGE);
-        return false;
-    }
+        if (!isValidNumericValue(acCost)) {
+            JOptionPane.showMessageDialog(this, "AC Cost Per Day must be a valid numeric value.", "Invalid Value", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
 
-    // Check if Food Cost Per Day is a valid numeric value
-    if (!isValidNumericValue(foodCost)) {
-        JOptionPane.showMessageDialog(this, "Food Cost Per Day must be a valid numeric value.", "Invalid Value", JOptionPane.WARNING_MESSAGE);
-        return false;
-    }
+        // Check if Food Cost Per Day is a valid numeric value
+        if (!isValidNumericValue(foodCost)) {
+            JOptionPane.showMessageDialog(this, "Food Cost Per Day must be a valid numeric value.", "Invalid Value", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
 
-    // Check if Hotel Cost Per Day is a valid numeric value
-    if (!isValidNumericValue(hotelCost)) {
-        JOptionPane.showMessageDialog(this, "Hotel Cost Per Day must be a valid numeric value.", "Invalid Value", JOptionPane.WARNING_MESSAGE);
-        return false;
-    }
+        // Check if Hotel Cost Per Day is a valid numeric value
+        if (!isValidNumericValue(hotelCost)) {
+            JOptionPane.showMessageDialog(this, "Hotel Cost Per Day must be a valid numeric value.", "Invalid Value", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
 
         // Positive Value Check
         double acCostValue = Double.parseDouble(acCost);
@@ -312,4 +325,32 @@ public class AddHotel extends JFrame implements ActionListener {
             return false;
         }
     }
+
+    public static void main(String[] args) {
+        new AddHotel("admin");
+    }
+    
+    
+    private int getCurrentAdminId() { // Pass the admin's username as an argument
+        try {
+            Conn conn = new Conn();
+            String sql = "SELECT id FROM adminlogins WHERE username = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, this.adminUsername);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id"); // Return the admin ID
+            } else {
+                // Handle the case where no admin with the provided username is found
+                JOptionPane.showMessageDialog(this, "Admin not found for username: " + this.adminUsername, "Admin Not Found", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Handle cases where there's no admin found or an error occurs (e.g., return -1 or throw an exception)
+        return -1;
+    }
+
 }

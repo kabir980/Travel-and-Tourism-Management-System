@@ -2,6 +2,8 @@ package travel.management.system;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.*;
 import javax.swing.border.*;
 import net.proteanit.sql.DbUtils;
@@ -11,8 +13,25 @@ public class BookedPackagePanel extends JPanel {
     JPanel panel;
     JLabel l1;
     JTable table;
+    String place;
+    public BookedPackageDetails bpd;
+    public AdminHome a;
+    public CustomerHome c;
     String user;
+    long id;
     JScrollPane tableviewscroll;
+
+    public BookedPackagePanel(AdminHome a) {
+        this();
+        this.a = a;
+    }
+
+    BookedPackagePanel(long id) {
+
+        this();
+        this.id = id;
+
+    }
 
     BookedPackagePanel() {
 
@@ -60,6 +79,38 @@ public class BookedPackagePanel extends JPanel {
         table.getTableHeader().setReorderingAllowed(false);
         tableviewscroll.setViewportView(table);
 
+        // Add the MouseListener to the JTable
+        table.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.getClickCount() > 1 && e.getButton() == MouseEvent.BUTTON1) {
+                    JTable t = (JTable) e.getSource();
+                    int row = t.getSelectedRow();
+//                    id = Integer.parseInt(table.getValueAt(row, 0).toString());
+
+                    try {
+                        String originalString = table.getValueAt(row, 0).toString();
+                        id = Long.parseLong(originalString.replaceAll("\\D", ""));
+                    } catch (NumberFormatException ae) {
+                        // Handle the exception if necessary
+                        ae.printStackTrace();
+                    }
+
+                    panel.setVisible(false);
+                    tableviewscroll.setVisible(false);
+//                    if (a != null) {
+                    bpd = new BookedPackageDetails(a, id);
+                    add(bpd);
+                    bpd.setVisible(true);
+//                    }
+//                    if (c != null) {
+//                        bpd = new BookedPackageDetails(c, place, user);
+//                        add(bpd);
+//                        bpd.setVisible(true);
+//                    }
+                }
+            }
+        });
+
         try {
             Conn conn = new Conn();
             String sql = "select booking_id as 'Booking Id', place as 'Place Name',name as 'Customer Name',customerID_Number as 'ID No.',persons as 'Total Persons',date as 'Date',totalprice as 'Total Price' from bookpackages";
@@ -99,10 +150,14 @@ public class BookedPackagePanel extends JPanel {
             table.getColumnModel().getColumn(4).setMaxWidth(200);
             table.getColumnModel().getColumn(5).setMaxWidth(200);
             table.getColumnModel().getColumn(6).setMaxWidth(180);
-       
 
         } catch (Exception ae) {
         }
 
     }
+
+    BookedPackagePanel(CustomerHome c, String user) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

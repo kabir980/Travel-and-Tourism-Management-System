@@ -19,6 +19,8 @@ public class PackagePanel extends JPanel implements ActionListener{
     public CustomerHome c;
     public AdminHome a;
     
+   private String adminUsername;
+    
     public PackagePanel(AdminHome a){
         this();
         this.a = a;
@@ -29,6 +31,18 @@ public class PackagePanel extends JPanel implements ActionListener{
         this.user = user;
         b1.setVisible(false);
     }
+    
+    PackagePanel(String adminUsername) {
+        this();
+        this.adminUsername = adminUsername;
+    }
+    
+    public PackagePanel(AdminHome a, String adminUsername) {
+        this();
+        this.a = a;
+        this.adminUsername = adminUsername;
+    }
+
     
     PackagePanel(){
     
@@ -114,7 +128,7 @@ public class PackagePanel extends JPanel implements ActionListener{
     }
     public void actionPerformed(ActionEvent ae){
             if(ae.getSource() == b1){
-                new AddPackage(this).setVisible(true);
+                new AddPackage(this.adminUsername).setVisible(true);
             }
     }
     
@@ -122,7 +136,7 @@ public class PackagePanel extends JPanel implements ActionListener{
 	{
             try{
                  Conn conn = new Conn();
-                 String sql = "select place as 'Place Name',state as 'City/State Name',price as 'Price',days_nights as 'Days And Nights' from packages" ;
+                 String sql = "select P.place as 'Place Name', P.state as 'City/State Name', P.price as 'Price', P.days_nights as 'Days And Nights', A.name as 'Created by' from packages P INNER JOIN adminlogins A ON P.created_by = A.id" ;
                  PreparedStatement ps = conn.c.prepareStatement(sql);
                  ResultSet rs = ps.executeQuery();
 		 if(rs!=null){
@@ -132,6 +146,7 @@ public class PackagePanel extends JPanel implements ActionListener{
 		 table.getColumnModel().getColumn(1).setMaxWidth(300);
                  table.getColumnModel().getColumn(2).setMaxWidth(300);
                  table.getColumnModel().getColumn(3).setMaxWidth(371);
+                 table.getColumnModel().getColumn(4).setMaxWidth(371);
             } catch(Exception ae){}
         
         }
