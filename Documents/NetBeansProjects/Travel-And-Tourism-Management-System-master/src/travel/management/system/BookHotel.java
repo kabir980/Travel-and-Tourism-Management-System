@@ -235,11 +235,11 @@ public class BookHotel extends JFrame implements ActionListener {
                     Conn conn = new Conn();
 
                     // Generate the booking ID
-                    String bookingID = generateHotelBookingID();
+                    long bookingID = generateHotelBookingID();
 
-                    String sql = "insert into bookhotels values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    String sql = "insert into bookhotels (booking_id, hotelname, name, customerID_Number, persons, days, ac_nonac, food, totalprice) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement ps = conn.c.prepareStatement(sql);
-                    ps.setString(1, bookingID);
+                    ps.setLong(1, bookingID);
                     ps.setString(2, t1.getText());
                     ps.setString(3, t2.getText());
                     ps.setString(4, t3.getText());
@@ -278,7 +278,7 @@ public class BookHotel extends JFrame implements ActionListener {
         }
     }
 
-    private String generateHotelBookingID() {
+  private long generateHotelBookingID() {
         // Retrieve the current timestamp
         long timestamp = System.currentTimeMillis();
 
@@ -286,7 +286,7 @@ public class BookHotel extends JFrame implements ActionListener {
         int randomNumber = (int) (Math.random() * (9999 - 1000 + 1) + 1000);
 
         // Concatenate the timestamp and random number to form the booking ID
-        return "HBID-" + timestamp + "-" + randomNumber;
+        return Long.parseLong(String.valueOf(timestamp) + String.valueOf(randomNumber));
     }
 
     private boolean validateFields() {

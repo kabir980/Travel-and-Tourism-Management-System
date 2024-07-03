@@ -187,22 +187,30 @@ public class UserDetails extends JPanel implements ActionListener {
     }
 
     public void display() {
-        try {
-            Conn conn = new Conn();
-            PreparedStatement ps = conn.c.prepareStatement("select * from users where username='" + username + "'");
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                l3.setText(rs.getString(2));
-                l8.setText(rs.getString(5));
-                l4.setText(rs.getString(3));
-                l7.setText(rs.getString(4));
-                l13.setText(rs.getString(7));
-                l15.setText(rs.getString(8));
-                
-            }
-        } catch (Exception e) {
+    try {
+        Conn conn = new Conn();
+        PreparedStatement ps = conn.c.prepareStatement(
+                "SELECT U.*, A.name AS 'Created by' " +
+                        "FROM users U " +
+                        "LEFT JOIN adminlogins A ON U.created_by = A.id " +
+                        "WHERE U.username = ?"
+        );
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            l3.setText(rs.getString("username"));
+            l4.setText(rs.getString("full_name"));
+            l7.setText(rs.getString("email"));
+            l8.setText(rs.getString("number"));
+            l13.setText(rs.getString("Created by"));
+            l15.setText(rs.getString("created_at"));
+            
         }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == b1) {

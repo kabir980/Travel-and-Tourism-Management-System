@@ -204,7 +204,7 @@ public class AdminHome extends JFrame implements ActionListener {
 
         } else if (source == b7) {
             activeButton(b7);
-            bookedhotelpanel = new BookedHotelPanel();
+            bookedhotelpanel = new BookedHotelPanel(id);
             bookedhotelpanel.setLocation(panelx, panely);
             bookedhotelpanel.setFocusable(true);
             contentPane.add(bookedhotelpanel);

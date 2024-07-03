@@ -176,19 +176,26 @@ public class HotelDetails extends JPanel implements ActionListener {
     public void display() {
         try {
             Conn conn = new Conn();
-            PreparedStatement ps = conn.c.prepareStatement("select * from hotels where name='" + name + "'");
+             PreparedStatement ps = conn.c.prepareStatement(
+            "SELECT H.*, A.name AS admin_name " +
+            "FROM hotels H " +
+            "INNER JOIN adminlogins A ON H.created_by = A.id " +
+            "WHERE H.name=?"
+        );
+        ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                l3.setText(rs.getString(2));
-                l4.setText(rs.getString(4));
-                l7.setText(rs.getString(3));
-                l8.setText(rs.getString(5));
-                l12.setText(rs.getString(6));
-                byte[] photo = rs.getBytes(7);
-                l14.setText(rs.getString(8));
-                Image i1 = new ImageIcon(photo).getImage().getScaledInstance(500, 360, Image.SCALE_SMOOTH);
-                l10.setIcon(new ImageIcon(i1));
-            }
+           if (rs.next()) {
+            l3.setText(rs.getString(2)); // Hotel Name
+            l4.setText(rs.getString(4)); // AC Cost Per Day
+            l7.setText(rs.getString(3)); // Hotel Cost Per Day
+            l8.setText(rs.getString(5)); // City/State
+            l12.setText(rs.getString(6)); // Food Cost Per Day
+            l14.setText(rs.getString("admin_name")); // Admin Name
+
+            byte[] photo = rs.getBytes(7);
+            Image i1 = new ImageIcon(photo).getImage().getScaledInstance(500, 360, Image.SCALE_SMOOTH);
+            l10.setIcon(new ImageIcon(i1));
+        }
         } catch (Exception e) {
         }
     }

@@ -2,6 +2,8 @@ package travel.management.system;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.*;
 import javax.swing.border.*;
 import net.proteanit.sql.DbUtils;
@@ -13,6 +15,21 @@ public class BookedHotelPanel extends JPanel {
     JTable table;
     String user;
     JScrollPane tableviewscroll;
+    public BookedHotelDetails bhd;
+    public AdminHome a;
+    long id;
+    
+       public BookedHotelPanel(AdminHome a) {
+        this();
+        this.a = a;
+    }
+
+    BookedHotelPanel(long id) {
+
+        this();
+        this.id = id;
+
+    }
 
     BookedHotelPanel() {
 
@@ -60,23 +77,54 @@ public class BookedHotelPanel extends JPanel {
         table.getTableHeader().setReorderingAllowed(false);
         tableviewscroll.setViewportView(table);
 
+        table.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.getClickCount() > 1 && e.getButton() == MouseEvent.BUTTON1) {
+                    JTable t = (JTable) e.getSource();
+                    int row = t.getSelectedRow();
+//                    id = Integer.parseInt(table.getValueAt(row, 0).toString());
+
+                    try {
+                        String originalString = table.getValueAt(row, 0).toString();
+                        id = Long.parseLong(originalString.replaceAll("\\D", ""));
+                    } catch (NumberFormatException ae) {
+                        // Handle the exception if necessary
+                        ae.printStackTrace();
+                    }
+
+                    panel.setVisible(false);
+                    tableviewscroll.setVisible(false);
+//                    if (a != null) {
+                    bhd = new BookedHotelDetails(a, id);
+                    add(bhd);
+                    bhd.setVisible(true);
+//                    }
+//                    if (c != null) {
+//                        bpd = new BookedPackageDetails(c, place, user);
+//                        add(bpd);
+//                        bpd.setVisible(true);
+//                    }
+                }
+            }
+        });
+
         try {
             Conn conn = new Conn();
-            String sql = "select booking_id as 'Booking Id', hotelname as 'Hotel Name',name as 'Customer Name',customerID_Number as 'ID No.',persons as 'Total Persons',days as 'No. Of Days',ac_nonac as 'AC/Non-AC',food as 'Food Included',totalprice as 'Total Price' from bookhotels";
+            String sql = "select booking_id as 'Booking Id', hotelname as 'Hotel Name',name as 'Customer Name',customerID_Number as 'ID No.',persons as 'Total Persons',totalprice as 'Total Price' from bookhotels";
             PreparedStatement ps = conn.c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs != null) {
                 table.setModel(DbUtils.resultSetToTableModel(rs));
             }
-            table.getColumnModel().getColumn(0).setMaxWidth(240);
-            table.getColumnModel().getColumn(1).setMaxWidth(190);
-            table.getColumnModel().getColumn(2).setMaxWidth(150);
-            table.getColumnModel().getColumn(3).setMaxWidth(150);
-            table.getColumnModel().getColumn(4).setMaxWidth(140);
-            table.getColumnModel().getColumn(5).setMaxWidth(150);
-            table.getColumnModel().getColumn(6).setMaxWidth(150);
-            table.getColumnModel().getColumn(7).setMaxWidth(161);
-            table.getColumnModel().getColumn(8).setMaxWidth(161);
+            table.getColumnModel().getColumn(0).setMaxWidth(200);
+            table.getColumnModel().getColumn(1).setMaxWidth(230);
+            table.getColumnModel().getColumn(2).setMaxWidth(240);
+            table.getColumnModel().getColumn(3).setMaxWidth(170);
+            table.getColumnModel().getColumn(4).setMaxWidth(200);
+            table.getColumnModel().getColumn(5).setMaxWidth(200);
+//            table.getColumnModel().getColumn(6).setMaxWidth(150);
+//            table.getColumnModel().getColumn(7).setMaxWidth(161);
+            table.getColumnModel().getColumn(6).setMaxWidth(180);
         } catch (Exception ae) {
         }
     }
@@ -86,21 +134,27 @@ public class BookedHotelPanel extends JPanel {
         this.user = user;
         try {
             Conn conn = new Conn();
-            String sql = "select booking_id as 'Booking Id', hotelname as 'Hotel Name',name as 'Customer Name',customerID_Number as 'ID No.',persons as 'Total Persons',days as 'No. Of Days',ac_nonac as 'AC/Non-AC',food as 'Food Included',totalprice as 'Total Price' from bookhotels "; //where username='" + user + "'
+            String sql = "select booking_id as 'Booking Id', hotelname as 'Hotel Name',name as 'Customer Name',customerID_Number as 'ID No.',persons as 'Total Persons',days as 'Days',totalprice as 'Total Price' from bookhotels "; //where username='" + user + "'
             PreparedStatement ps = conn.c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
+            
+//            JTable table = new JTable();
+            
             if (rs != null) {
                 table.setModel(DbUtils.resultSetToTableModel(rs));
             }
-            table.getColumnModel().getColumn(0).setMaxWidth(240);
-            table.getColumnModel().getColumn(1).setMaxWidth(190);
-            table.getColumnModel().getColumn(2).setMaxWidth(150);
-            table.getColumnModel().getColumn(3).setMaxWidth(150);
-            table.getColumnModel().getColumn(4).setMaxWidth(140);
-            table.getColumnModel().getColumn(5).setMaxWidth(150);
-            table.getColumnModel().getColumn(6).setMaxWidth(150);
-            table.getColumnModel().getColumn(7).setMaxWidth(161);
-            table.getColumnModel().getColumn(8).setMaxWidth(161);
+            table.getColumnModel().getColumn(0).setMaxWidth(200);
+            table.getColumnModel().getColumn(1).setMaxWidth(230);
+            table.getColumnModel().getColumn(2).setMaxWidth(240);
+            table.getColumnModel().getColumn(3).setMaxWidth(170);
+            table.getColumnModel().getColumn(4).setMaxWidth(200);
+            table.getColumnModel().getColumn(5).setMaxWidth(200);
+//            table.getColumnModel().getColumn(6).setMaxWidth(150);
+//            table.getColumnModel().getColumn(7).setMaxWidth(161);
+            table.getColumnModel().getColumn(6).setMaxWidth(180);
+            
+//             JScrollPane scrollPane = new JScrollPane(table);
+//             add(scrollPane);
         } catch (Exception ae) {
         }
     }

@@ -171,7 +171,7 @@ public class BookPackage extends JFrame implements ActionListener {
                 try {
                     Conn conn = new Conn();
                     long bookingID = generatePackageBookingID();
-                    System.out.println("Generated Booking ID: " + bookingID);
+//                    System.out.println("Generated Booking ID: " + bookingID);
                     String sql = "insert into bookpackages (booking_id, place, name, customerID_Number, persons, date, totalprice) values(?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement ps = conn.c.prepareStatement(sql);
                     ps.setLong(1, bookingID);
@@ -184,7 +184,7 @@ public class BookPackage extends JFrame implements ActionListener {
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Package Booked Successfully");
                     this.dispose();
-                } catch (SQLException  e1) {
+                } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
             }

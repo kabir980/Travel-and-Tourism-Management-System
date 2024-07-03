@@ -6,9 +6,9 @@ import javax.swing.border.*;
 import java.awt.event.*;
 import java.sql.*;
 
-public class BookedPackageDetails extends JPanel implements ActionListener {
+public class BookedHotelDetails extends JPanel implements ActionListener {
 
-    JLabel l1, l2, l3, l4, l5, l6, l7, l8, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22;
+    JLabel l1, l2, l3, l4, l5, l6, l7, l8, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24;
     JButton b1, b2;
     JPanel panel, panel1;
     public AdminHome a;
@@ -16,21 +16,21 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
     String place, user;
     long id;
 
-    BookedPackageDetails(AdminHome a, String place) {
+    BookedHotelDetails(AdminHome a, String place) {
         this();
         this.a = a;
         this.place = place;
         display();
     }
 
-    BookedPackageDetails(AdminHome a, long id) {
+    BookedHotelDetails(AdminHome a, long id) {
         this();
         this.a = a;
         this.id = id;
         display();
     }
 
-    BookedPackageDetails(CustomerHome c, String place, String user) {
+    BookedHotelDetails(CustomerHome c, String place, String user) {
         this();
         this.c = c;
         this.place = place;
@@ -39,7 +39,7 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
         display();
     }
 
-    BookedPackageDetails() {
+    BookedHotelDetails() {
 
         setBorder(new EmptyBorder(0, 0, 0, 0));
         setBackground(Color.WHITE);
@@ -58,7 +58,7 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
         add(panel1);
         panel1.setLayout(null);
 
-        l11 = new JLabel("Booked Package Details ");
+        l11 = new JLabel("Booked Hotel Details ");
         l11.setIcon(null);
         l11.setBounds(5, 55, 360, 45);
         panel.add(l11);
@@ -80,7 +80,7 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
         l3.setBounds(252, 60, 330, 45);
         panel1.add(l3);
 
-        l2 = new JLabel("Place  ");
+        l2 = new JLabel("Hotel Name  ");
         l2.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
         l2.setBorder(new LineBorder(new Color(192, 192, 192)));
         l2.setBackground(Color.WHITE);
@@ -122,19 +122,19 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
         l22.setBounds(252, 192, 330, 45);
         panel1.add(l22);
 
-//        l20 = new JLabel("Booked by  ");
-//        l20.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
-//        l20.setBorder(new LineBorder(new Color(192, 192, 192)));
-//        l20.setBackground(Color.WHITE);
-//        l20.setBounds(2, 236, 250, 45);
-//        panel1.add(l20);
-//
-//        l21 = new JLabel();
-//        l21.setFont(new Font("Segoe UI Historic", Font.BOLD, 20));
-//        l21.setBorder(new LineBorder(new Color(192, 192, 192)));
-//        l21.setBackground(Color.WHITE);
-//        l21.setBounds(252, 236, 330, 45);
-//        panel1.add(l21);
+        l20 = new JLabel("Booked at  ");
+        l20.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
+        l20.setBorder(new LineBorder(new Color(192, 192, 192)));
+        l20.setBackground(Color.WHITE);
+        l20.setBounds(2, 236, 250, 45);
+        panel1.add(l20);
+
+        l21 = new JLabel();
+        l21.setFont(new Font("Segoe UI Historic", Font.BOLD, 20));
+        l21.setBorder(new LineBorder(new Color(192, 192, 192)));
+        l21.setBackground(Color.WHITE);
+        l21.setBounds(252, 236, 330, 45);
+        panel1.add(l21);
 
         l5 = new JLabel("Customer ID No.  ");
         l5.setBorder(new LineBorder(new Color(192, 192, 192)));
@@ -164,7 +164,7 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
         l17.setBounds(762, 104, 259, 45);
         panel1.add(l17);
 
-        l14 = new JLabel("Date  ");
+        l14 = new JLabel("No. of Days  ");
         l14.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
         l14.setBorder(new LineBorder(new Color(192, 192, 192)));
         l14.setBackground(Color.WHITE);
@@ -178,7 +178,7 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
         l15.setBounds(762, 148, 259, 45);
         panel1.add(l15);
 
-        l18 = new JLabel("Booked at  ");
+        l18 = new JLabel("Ac or Not ");
         l18.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
         l18.setBorder(new LineBorder(new Color(192, 192, 192)));
         l18.setBackground(Color.WHITE);
@@ -191,6 +191,20 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
         l19.setBackground(Color.WHITE);
         l19.setBounds(762, 192, 259, 45);
         panel1.add(l19);
+        
+        l23 = new JLabel("Food Included ? ");
+        l23.setFont(new Font("Segoe UI Historic", Font.PLAIN, 20));
+        l23.setBorder(new LineBorder(new Color(192, 192, 192)));
+        l23.setBackground(Color.WHITE);
+        l23.setBounds(582, 236, 180, 45);
+        panel1.add(l23);
+        
+        l24 = new JLabel();
+        l24.setFont(new Font("Segoe UI Historic", Font.BOLD, 20));
+        l24.setBorder(new LineBorder(new Color(192, 192, 192)));
+        l24.setBackground(Color.WHITE);
+        l24.setBounds(762, 236, 259, 45);
+        panel1.add(l24);
 
 //        l10 = new JLabel();
 //        l10.setBounds(300, 15, 400, 200);
@@ -206,6 +220,7 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
 //        b1.setForeground(new Color(0, 128, 128));
 //        b1.setFont(new Font("Segoe UI", Font.BOLD, 15));
 //        b1.setBackground(Color.WHITE);
+
         b2 = new JButton("Back", new ImageIcon(ClassLoader.getSystemResource("Travel/Management/System/icons/back.png")));
         b2.setBorder(new EmptyBorder(0, 0, 0, 0));
         b2.setBounds(20, 120, 140, 30);
@@ -220,24 +235,26 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
 
     }
 
-    public void display() {
+     public void display() {
         try {
             Conn conn = new Conn();
-            PreparedStatement ps = conn.c.prepareStatement("select * from bookpackages where booking_id=?");
+            PreparedStatement ps = conn.c.prepareStatement("select * from bookhotels where booking_id=?");
 
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                l3.setText(rs.getString(2)); // booking_id
-                l4.setText(rs.getString(3)); // place
-                l13.setText(rs.getString(4)); // name
-                l7.setText(rs.getString(5)); // customerID_Number
-                l17.setText(rs.getString(6)); // persons
-                l15.setText(rs.getString(7)); // date
-                l22.setText(rs.getString(8));  // totalprice
-                l19.setText(rs.getString(9));
-            }
+            l3.setText(rs.getString("booking_id"));
+            l4.setText(rs.getString("hotelname"));
+            l13.setText(rs.getString("name"));
+            l7.setText(rs.getString("customerID_Number"));
+            l17.setText(rs.getString("persons"));
+            l15.setText(rs.getString("days"));
+            l22.setText(rs.getString("totalprice"));
+            l19.setText(rs.getString("ac_nonac"));
+            l24.setText(rs.getString("food"));
+            l21.setText(rs.getString("booked_at"));
+        }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -254,13 +271,13 @@ public class BookedPackageDetails extends JPanel implements ActionListener {
                 new BookPackage(place, user).setVisible(true);
             }
         } else if (ae.getSource() == b2) {
-            panel.setVisible(false);
-            panel1.setVisible(false);
+           panel.setVisible(false);
+        panel1.setVisible(false);
 
-            // Assuming a is always set for this case
-            BookedPackagePanel bp = new BookedPackagePanel(a);
-            add(bp);
-            bp.setVisible(true);
+        // Assuming a is always set for this case
+        BookedHotelPanel bhd = new BookedHotelPanel(a);
+        add(bhd);
+        bhd.setVisible(true);
         }
     }
 }

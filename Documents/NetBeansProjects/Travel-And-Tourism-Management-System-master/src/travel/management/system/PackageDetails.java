@@ -191,7 +191,8 @@ public class PackageDetails extends JPanel implements ActionListener {
     public void display() {
         try {
             Conn conn = new Conn();
-            PreparedStatement ps = conn.c.prepareStatement("select * from packages where place='" + place + "'");
+            PreparedStatement ps = conn.c.prepareStatement("select P.*, A.name as 'Created by' from packages P LEFT JOIN adminlogins A ON P.created_by = A.id where P.place= ?");
+            ps.setString(1, place);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 l3.setText(rs.getString(2));
@@ -200,7 +201,7 @@ public class PackageDetails extends JPanel implements ActionListener {
                 l8.setText(rs.getString(4));
                 ta1.setText(rs.getString(6));
                 byte[] photo = rs.getBytes(7);
-                l13.setText(rs.getString(8));
+                l13.setText(rs.getString("Created by"));
                 l15.setText(rs.getString(9));
                 Image i1 = new ImageIcon(photo).getImage().getScaledInstance(500, 360, Image.SCALE_SMOOTH);
                 l10.setIcon(new ImageIcon(i1));

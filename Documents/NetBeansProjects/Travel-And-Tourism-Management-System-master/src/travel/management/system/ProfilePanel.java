@@ -98,15 +98,6 @@ public class ProfilePanel extends JPanel implements ActionListener{
                 l5.setBounds(400, 290, 200, 30);
                 panel1.add(l5);
                 
-//                l6 = new JLabel("Phone No.: ");
-//                l6.setFont(new Font("Times New Roman", Font.BOLD, 30));
-//                l6.setBounds(400, 340, 200, 30);
-//                panel1.add(l6);
-                
-//                l7 = new JLabel("Pan Card No.:");
-//                l7.setFont(new Font("Times New Roman", Font.BOLD, 30));
-//                l7.setBounds(400, 390, 200, 30);
-//                panel1.add(l7);
                 
                 t1 = new JTextField();
 	        t1.setBounds(610, 140, 250, 30);
@@ -132,18 +123,7 @@ public class ProfilePanel extends JPanel implements ActionListener{
                 t4.setEditable(false);
                 panel1.add(t4);
         
-//                t5 = new JTextField();
-//	        t5.setBounds(610, 340, 250, 30);
-//                t5.setBackground(Color.WHITE);
-//                t5.setEditable(false);
-//                panel1.add(t5);
-//        
-//                t6 = new JTextField();
-//	        t6.setBounds(610, 390, 250, 30);
-//                t6.setBackground(Color.WHITE);
-//                t6.setEditable(false);
-//                panel1.add(t6);
-                
+             
         }
         public ProfilePanel(AdminHome a, String username){
             this();
@@ -160,10 +140,10 @@ public class ProfilePanel extends JPanel implements ActionListener{
 //                    String sql1 = "select *from admins where username = '"+username+"'";
 //                    ResultSet rs1 = conn.s.executeQuery(sql1);
 //                    if(rs1.next()){
-//                        //t1.setText(rs1.getString("name"));
-//                        t4.setText(rs1.getString("email"));
-//                       // t5.setText(rs1.getString("phone"));
-////                        t6.setText(rs1.getString("pancard"));
+                        t1.setText(rs.getString("name"));
+                        t3.setText(rs.getString("email"));
+                      t4.setText(rs.getString("number"));
+////                        
            }
                 }catch(Exception e){}
                 
